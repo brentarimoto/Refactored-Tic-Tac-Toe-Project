@@ -1,21 +1,5 @@
-// possible winning combinations
-
-// ROWS =
-// [0, 1, 2]
-// [3, 4, 5]
-// [6, 7, 8]
-
-// COLUMNS =
-// [0, 3, 6]
-// [1, 4, 7]
-// [2, 5, 8]
-
-// DIAGONALS
-// [0, 4, 8]
-// [6, 4, 2]
-
-
 window.addEventListener("DOMContentLoaded", (event) => {
+///////////////////// FUNCTIONS //////////////////////////////
 
     ///// Storage Functions /////
     function updateFromStorage(){
@@ -46,6 +30,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     }
 
     ///// Update the Board Function /////
+
+    // Updates the board based on the virtual board
     function updateBoard(){
         let squares=document.querySelectorAll('.square')
         // Loop through the array, updating the board with the correct array values
@@ -62,6 +48,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     ///// Is Win Function /////
 
+    // Checks if there is a winner based off of current positions on the board
     function isWin(array){
         if (array[0]===array[1] && array[1]===array[2] && array[0]!== '-'){return true}
         else if (array[0]===array[3] && array[3]===array[6] && array[0]!== '-'){return true}
@@ -74,7 +61,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
         return false
     }
 
-    ///// Show Result Function
+    ///// Show Result Function /////
+
+    // Shows the header for whoever won, or if there was a tie then no one wins
     function showResult(giveup){
         newButton.disabled = false;
         giveUpButton.disabled = true;
@@ -100,6 +89,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     ///// Computer Player /////
 
+    // Random flip to see if computer or player starts
+    // If in situation where you're reload the page and it was player's turn, then it won't do the computers turn
     function compStart(playerTurn){
         let start = Math.floor(Math.random()*2)
         if (start === 0 && !playerTurn){
@@ -107,6 +98,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         }
     }
 
+    // Function replacating a computer choosing a random location, and making its move
     function compPlayer(){
         let bool = true;
         let position;
@@ -129,7 +121,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         }
         store()
     }
-
+///////////////////////////////////////////////////////////
     ///// Initialize and Define Variables /////
 
     let board = document.getElementById("tic-tac-toe-board");
@@ -146,27 +138,32 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     updateFromStorage()
 
+    ///// Start Game /////
     compStart(playerTurn)
 
     ///// Clicks /////
 
     // Records click events on the board
-    // Shows X or O on that location
     board.addEventListener("click", event => {
 
+        // If the board is alread in a won or tied state, make it so you cant click
         if (isWin(virtualBoard)|| isTie(virtualBoard)) {return}
 
+        // To Prevent clicking outside the board
         if (!event.target.id.includes("square")) {return};
 
+        // Assigns position to Virtual Board (The array that keeps track of the players moves)
         let position = Number(event.target.id[7]);
-        // When eventlistener sees the click, itll fill in the spot for the board
         virtualBoard[position] = turn;
 
+        // Updates the board to the match the Virtual Board
         updateBoard(virtualBoard);
 
+        // Checks for Win or Tie
         if (isWin(virtualBoard) || isTie(virtualBoard)){
             showResult();
             store()
+        // If not then just switch turns (in this case to the computers turn)
         }else {
             if (turn === "x"){
                 turn = 'o'
@@ -182,7 +179,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     buttons.addEventListener("click", event => {
 
-        // NEW GAME refreshes the whole page - button listener
+        // NEW GAME resets all the values back to base - button listener
         if (event.target.id === "new-game") {
 
             virtualBoard =['-','-','-','-','-','-','-','-','-']
