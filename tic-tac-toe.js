@@ -146,8 +146,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     // Records click events on the board
     board.addEventListener("click", event => {
 
-        // If the board is alread in a won or tied state, make it so you cant click
-        if (isWin(virtualBoard)|| isTie(virtualBoard)) {return}
+        // If the board is alread in a won or tied state or the giveup button is greyed out, makes it so you cant click on the board
+        if (isWin(virtualBoard)|| isTie(virtualBoard) || giveUpButton.disabled === true) {return}
 
         // To Prevent clicking outside the board
         if (!event.target.id.includes("square")) {return};
